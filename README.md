@@ -1,55 +1,69 @@
 # JARVIS + FRIDAY AI Assistant
 
-A starter Windows desktop voice assistant with two selectable AI personas:
+A Windows desktop voice assistant with two selectable AI personas:
 
 - **JARVIS** — Google Gemini
-- **FRIDAY** — OpenAI ChatGPT
-
-This starter includes local voice input/output, typed input fallback, provider configuration, and a simple command-line conversation loop. It does not yet execute operating-system commands or silently control the computer.
+- **FRIDAY** — OpenAI
 
 ## Features
 
-- Select JARVIS (Gemini) or FRIDAY (OpenAI).
-- Microphone speech input with typed-text fallback.
-- Spoken responses through the computer's default audio device.
-- Conversation history within the active session.
-- API keys read from a local `.env` file rather than hard-coded.
+- Tkinter desktop chat UI and command-line fallback.
+- Select JARVIS or FRIDAY.
+- Typed prompts and one-shot microphone input.
+- Optional spoken responses through the default audio device.
+- Session conversation history.
+- Quick-launch buttons and allow-listed commands for Notepad, Calculator, Paint, and Explorer.
+- API keys loaded from a local `.env` file.
 
 ## Setup on Windows
 
 1. Install Python 3.11 or newer.
-2. Download or clone this repository.
-3. Open PowerShell in the project folder:
+2. Clone this repository and open PowerShell in the folder.
+3. Create a virtual environment and install dependencies:
    ```powershell
    py -m venv .venv
    .\.venv\Scripts\Activate.ps1
    pip install -r requirements.txt
    ```
-4. Copy `.env.example` to `.env` and add your provider API keys.
-5. Run:
+4. Create your local environment file:
    ```powershell
-   python main.py
+   Copy-Item .env.example .env
+   notepad .env
    ```
+5. Add the API key(s) you use to `.env`.
+6. Start the desktop UI:
+   ```powershell
+   python desktop_ui.py
+   ```
+   Or double-click `run_gui.bat`.
+
+For the original terminal interface, run `python main.py`.
 
 ## API keys
 
-- `GEMINI_API_KEY`: Google AI Studio key.
-- `OPENAI_API_KEY`: OpenAI platform API key.
+- `GEMINI_API_KEY`: Google AI Studio key for JARVIS.
+- `OPENAI_API_KEY`: OpenAI API key for FRIDAY.
 
 API usage may incur charges. A ChatGPT subscription and OpenAI API billing are separate.
+
+## App launching
+
+Use the UI quick-launch buttons, or type commands such as `/open notepad`, `/open calculator`, `/open paint`, or `/open explorer`. Launching is restricted to a fixed allow-list and uses `shell=False`; arbitrary shell commands are not accepted.
 
 ## Safety and privacy
 
 - Prompts are sent to the selected AI provider.
-- Microphone speech recognition uses the configured speech recognition service.
-- Never commit real API keys, passwords, or personal information.
-- This starter intentionally does not run arbitrary shell commands.
+- Microphone input is captured only after pressing **Voice input**. This stage does not continuously listen for a wake word.
+- Never commit real API keys, passwords, or personal information. The real `.env` file is ignored by Git.
+- The app does not execute arbitrary AI-generated system commands.
 
-## Planned structure
+## Project structure
 
 ```text
 jarvis-friday-ai-assistant/
 ├── main.py
+├── desktop_ui.py
+├── app_launcher.py
 ├── jarvis.py
 ├── friday.py
 ├── ai_client.py
@@ -59,7 +73,10 @@ jarvis-friday-ai-assistant/
 ├── requirements.txt
 ├── .env.example
 ├── .gitignore
-└── docs/architecture.md
+├── run_gui.bat
+└── docs/
+    ├── architecture.md
+    └── desktop-ui.md
 ```
 
-This is a starter implementation; dependencies and microphone/audio settings can vary by machine.
+This is an evolving starter project. API access, microphone permissions, audio drivers, and Python package compatibility can vary by computer.
